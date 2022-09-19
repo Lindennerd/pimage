@@ -5,7 +5,8 @@ import random
 import base64
 import os
 
-dir = os.path.join(os.path.dirname(__file__), '../assets')
+assets_dir = os.path.join(os.path.dirname(__file__), '../assets')
+temp_dir = os.path.join(os.path.dirname(__file__), '../temp')
 
 def random_name():
     letters = string.ascii_letters
@@ -18,16 +19,21 @@ def get_base64_str(image):
     print(str64)
     return str64
 
+def delete_temp_image(image):
+    os.remove(image)
+
 def pasteTextToImage(image_url, text):
-    temp_name = os.path.join(dir, random_name() + '.jpg')
+    temp_name = os.path.join(temp_dir, random_name() + '.jpg')
     request.urlretrieve(image_url, temp_name)
 
     image = Image.open(temp_name)
-    font = ImageFont.truetype(os.path.join(dir,'segoeui.ttf'), 32)
+    font = ImageFont.truetype(os.path.join(assets_dir,'segoeui.ttf'), 32)
 
     editable = ImageDraw.Draw(image)
     editable.text((10,90), text, (0, 0, 0), font=font)
 
     image.save(temp_name)
 
-    return get_base64_str(temp_name)
+    strb64 = get_base64_str(temp_name)
+    delete_temp_image(temp_name)
+    return strb64
