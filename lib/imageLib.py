@@ -36,4 +36,4 @@ def pasteTextToImage(image_url, text):
 
     strb64 = get_base64_str(temp_name)
     delete_temp_image(temp_name)
-    return strb64
+    return str(strb64)
