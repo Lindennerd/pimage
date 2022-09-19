@@ -162,3 +162,5 @@ cython_debug/
 /temp
 /.venv
 /.venv/*
+*.pyc
+__pycache__/*
