@@ -14,7 +14,7 @@ def random_name():
 
 def get_base64_str(image):
     with open(image, 'rb') as file:
-        str64 = base64.b64encode(file.read())
+        str64 = base64.b64encode(file.read()).decode()
     
     print(str64)
     return str64
@@ -30,10 +30,48 @@ def pasteTextToImage(image_url, text):
     font = ImageFont.truetype(os.path.join(assets_dir,'segoeui.ttf'), 32)
 
     editable = ImageDraw.Draw(image)
-    editable.text((10,90), text, (0, 0, 0), font=font)
+    editable.text((10,90), text_wrap(text, font, 700), (0, 0, 0), font=font)
 
     image.save(temp_name)
 
     strb64 = get_base64_str(temp_name)
     delete_temp_image(temp_name)
     return str(strb64)
+
+# REF https://itnext.io/how-to-wrap-text-on-image-using-python-8f569860f89e
+def text_wrap(text, font, max_width):
+        """Wrap text base on specified width. 
+        This is to enable text of width more than the image width to be display
+        nicely.
+        @params:
+            text: str
+                text to wrap
+            font: obj
+                font of the text
+            max_width: int
+                width to split the text with
+        @return
+            lines: list[str]
+                list of sub-strings
+        """
+        lines = []
+        
+        # If the text width is smaller than the image width, then no need to split
+        # just add it to the line list and return
+        if font.getsize(text)[0]  <= max_width:
+            lines.append(text)
+        else:
+            #split the line by spaces to get words
+            words = text.split(' ')
+            i = 0
+            # append every word to a line while its width is shorter than the image width
+            while i < len(words):
+                line = ''
+                while i < len(words) and font.getsize(line + words[i])[0] <= max_width:
+                    line = line + words[i]+ " "
+                    i += 1
+                if not line:
+                    line = words[i]
+                    i += 1
+                lines.append(line)
+        return lines
