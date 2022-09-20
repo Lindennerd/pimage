@@ -30,7 +30,11 @@ def pasteTextToImage(image_url, text):
     font = ImageFont.truetype(os.path.join(assets_dir,'segoeui.ttf'), 32)
 
     editable = ImageDraw.Draw(image)
-    editable.text((10,90), text_wrap(text, font, 700), (0, 0, 0), font=font)
+    init_x = 10
+    init_y = 9
+    for line in text_wrap(text, font, 700):
+        editable.text((init_x, init_y), line, (0, 0, 0), font=font)
+        init_y = init_y + 5
 
     image.save(temp_name)
 
