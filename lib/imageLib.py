@@ -16,7 +16,6 @@ def get_base64_str(image):
     with open(image, 'rb') as file:
         str64 = base64.b64encode(file.read()).decode()
     
-    print(str64)
     return str64
 
 def delete_temp_image(image):
@@ -31,10 +30,10 @@ def pasteTextToImage(image_url, text):
 
     editable = ImageDraw.Draw(image)
     init_x = 10
-    init_y = 9
+    init_y = 75
     for line in text_wrap(text, font, 700):
         editable.text((init_x, init_y), line, (0, 0, 0), font=font)
-        init_y = init_y + 5
+        init_y = init_y + 30
 
     image.save(temp_name)
 
